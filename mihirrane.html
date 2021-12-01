@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mihir Rane - AVRL Assignment</title>
+    <style>
+        :root {
+            --red: #fe4d29;
+            --yellow: #ffec60;
+            --blue: #29acf2;
+            --green: #2b7130;
+        }
+
+        body {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 120px;
+        }
+
+        .wrapper {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+
+        .circle {
+            width: 30%;
+            height: 30%;
+            border-radius: 30px;
+            display: inline-block;
+            position: absolute;
+            transition: background-color 1s linear;
+        }
+
+        #c1 {
+            background-color: var(--red);
+            z-index: 4;
+            left: 0;
+            top: 0;
+        }
+
+        #c2 {
+            background-color: var(--yellow);
+            z-index: 3;
+            right: 0;
+            top: 0;
+        }
+
+        #c3 {
+            background-color: var(--blue);
+            z-index: 2;
+            right: 0;
+            bottom: 0;
+        }
+
+        #c4 {
+            background-color: var(--green);
+            z-index: 1;
+            left: 0;
+            bottom: 0;
+        }
+
+        .btn-wrapper {
+            margin: 60px 0px;
+        }
+
+        .btn {
+            background-color: #097374;
+            color: #efefef;
+            margin: 0px 20px;
+            padding: 6px 18px;
+            cursor: pointer;
+        }
+
+        @keyframes red_to_yellow {
+            from {
+                background-color: var(--red);
+            }
+
+            to {
+                background-color: var(--yellow);
+            }
+        }
+
+        @keyframes yellow_to_blue {
+            from {
+                background-color: var(--yellow);
+            }
+
+            to {
+                background-color: var(--blue);
+            }
+        }
+
+        @keyframes blue_to_green {
+            from {
+                background-color: var(--blue);
+            }
+
+            to {
+                background-color: var(--green);
+            }
+        }
+
+        @keyframes green_to_red {
+            from {
+                background-color: var(--green);
+            }
+
+            to {
+                background-color: var(--red);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class='wrapper'>
+        <div id='c1' class='circle'></div>
+        <div id='c2' class='circle'></div>
+        <div id='c4' class='circle'></div>
+        <div id='c3' class='circle'></div>
+    </div>
+    <div class='btn-wrapper'>
+        <button id='start-btn' class='btn'>Start</button>
+        <button id='stop-btn' class='btn'>Stop</button>
+    </div>
+    <script>
+        "use strict";
+
+        const colors = [
+            'var(--red)',
+            'var(--yellow)',
+            'var(--blue)',
+            'var(--green)'
+        ];
+
+        let i1 = 1, i2 = 2, i3 = 3, i4 = 0;
+
+        const c1 = document.getElementById('c1');
+        const c2 = document.getElementById('c2');
+        const c3 = document.getElementById('c3');
+        const c4 = document.getElementById('c4');
+
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+
+        let requestId;
+        let step = 1;
+
+        c1.style.width = '30%';
+        c2.style.height = '30%';
+        c3.style.width = '30%';
+        c4.style.height = '30%';
+
+        function animate() {
+            requestId = undefined;
+
+            if (c1.style.width === '100%') {
+                step = -1;
+            }
+
+            if (c1.style.width === '30%') {
+                step = 1;
+
+                c1.style.backgroundColor = colors[i1];
+                c2.style.backgroundColor = colors[i2];
+                c3.style.backgroundColor = colors[i3];
+                c4.style.backgroundColor = colors[i4];
+
+                i1 += 1;
+                i2 += 1;
+                i3 += 1;
+                i4 += 1;
+
+                i1 = i1 % 4;
+                i2 = i2 % 4;
+                i3 = i3 % 4;
+                i4 = i4 % 4;
+            }
+
+            c1.style.width = Number(c1.style.width.slice(0, -1)) + step + '%';
+            c2.style.height = Number(c2.style.height.slice(0, -1)) + step + '%';
+            c3.style.width = Number(c3.style.width.slice(0, -1)) + step + '%';
+            c4.style.height = Number(c4.style.height.slice(0, -1)) + step + '%';
+
+
+            if (!requestId) {
+                requestId = window.requestAnimationFrame(animate);
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!requestId) {
+                requestId = requestAnimationFrame(animate);
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (requestId) {
+                cancelAnimationFrame(requestId);
+                requestId = undefined;
+            }
+        });
+    </script>
+</body>
+
+</html>
